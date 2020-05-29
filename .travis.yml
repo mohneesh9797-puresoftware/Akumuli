@@ -21,6 +21,19 @@ matrix:
       script:
       - bash ./CI/runci.sh ubuntu-18.04
       - source ./CI/prepare-docker-image.sh
+    - arch: arm64
+      os: linux
+      dist: bionic
+      sudo: required
+      compiler: gcc
+      env:
+      - DISTRIBUTION=ubuntu/bionic
+      - DEPLOY_PACKAGE=true
+      - DEPLOY_IMAGE=true
+      - GENERIC_BUILD=false
+      script:
+      - bash ./CI/runci.sh ubuntu-18.04
+      - source ./CI/prepare-docker-image.sh
     # VM-based 64-bit generic build (GCC)
     - os: linux
       dist: bionic
@@ -35,8 +48,36 @@ matrix:
       - bash ./CI/runci.sh ubuntu-18.04
       - source ./CI/prepare-docker-image.sh
       if: branch = master OR tag IS present
+    - arch: rm64
+      os: linux
+      dist: bionic
+      sudo: required
+      compiler: gcc
+      env:
+      - DISTRIBUTION=ubuntu/bionic
+      - DEPLOY_PACKAGE=false
+      - DEPLOY_IMAGE=true
+      - GENERIC_BUILD=true
+      script:
+      - bash ./CI/runci.sh ubuntu-18.04
+      - source ./CI/prepare-docker-image.sh
+      if: branch = master OR tag IS present
     # VM-based 64-bit build (Clang)
     - os: linux
+      dist: bionic
+      sudo: required
+      compiler: clang
+      env:
+      - DISTRIBUTION=ubuntu/bionic
+      - DEPLOY_PACKAGE=false
+      - DEPLOY_IMAGE=false
+      - GENERIC_BUILD=false
+      #- DEBUG_BUILD=true
+      script:
+      - bash ./CI/runci.sh ubuntu-18.04
+      if: branch = master OR tag IS present
+    - arch: arm64
+      os: linux
       dist: bionic
       sudo: required
       compiler: clang
